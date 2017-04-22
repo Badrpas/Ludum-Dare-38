@@ -5,6 +5,10 @@
     "sourceType": "module"
   },
   "rules": {
-    "semi": ["error", "always", { "omitLastInOneLineBlock": false }]
+    "semi": ["error", "always", { "omitLastInOneLineBlock": false }],
+    "no-multi-spaces": ["never"]
+  },
+  "globals": {
+    "game": false
   }
 }
