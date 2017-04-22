@@ -14,7 +14,6 @@ export default class extends Phaser.State {
   render () {
     if (__DEV__) {
       this.game.debug.spriteInfo(this.qwe, 32, 32);
-      this.game.debug.text('kek', 123, 123);
     }
     this.qwe.rotation += 0.1;
   }

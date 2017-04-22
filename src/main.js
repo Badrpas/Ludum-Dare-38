@@ -21,6 +21,12 @@ class Game extends Phaser.Game {
 
     this.state.start('Boot');
   }
+  
+  update (time) {
+    let r = super.update(time);
+    this.dt = this.time.dt = this.time.elapsed / 1000;
+    return r;
+  }
 }
 
 window.game = new Game();

@@ -6,7 +6,9 @@
   },
   "rules": {
     "semi": ["error", "always", { "omitLastInOneLineBlock": false }],
-    "no-multi-spaces": ["never"]
+    "no-multi-spaces": ["off"],
+    "key-spacing": ["off"],
+    "no-trailing-spaces": "off"
   },
   "globals": {
     "game": false
