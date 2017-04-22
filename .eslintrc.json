@@ -8,9 +8,14 @@
     "semi": ["error", "always", { "omitLastInOneLineBlock": false }],
     "no-multi-spaces": ["off"],
     "key-spacing": ["off"],
-    "no-trailing-spaces": "off"
+    "no-trailing-spaces": "off",
+    "no-multiple-empty-lines" : "off",
+    "eol-last": "off",
+    "padded-blocks": "off",
+    "object-curly-spacing": "off"
   },
   "globals": {
-    "game": false
+    "game": false,
+    "dt": true
   }
 }

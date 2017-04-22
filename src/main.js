@@ -4,6 +4,7 @@ import Phaser from 'phaser';
 
 import BootState from './states/Boot';
 import LoadState from './states/Load';
+import IntroState from './states/Intro';
 import GameState from './states/Game';
 
 
@@ -17,6 +18,7 @@ class Game extends Phaser.Game {
 
     this.state.add('Boot', BootState, false);
     this.state.add('Load', LoadState, false);
+    this.state.add('Intro', IntroState, false);
     this.state.add('Game', GameState, false);
 
     this.state.start('Boot');
@@ -24,7 +26,7 @@ class Game extends Phaser.Game {
   
   update (time) {
     let r = super.update(time);
-    this.dt = this.time.dt = this.time.elapsed / 1000;
+    window.dt = this.dt = this.time.dt = this.time.elapsed / 1000;
     return r;
   }
 }
