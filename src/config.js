@@ -1,5 +1,5 @@
 export default {
-  gameWidth: 760,
-  gameHeight: 400,
+  width: 800,
+  height: 600,
   localStorageName: 'ld38'
-};
+}

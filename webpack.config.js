@@ -1,16 +1,16 @@
-var path = require('path')
-var webpack = require('webpack')
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+let path = require('path');
+let webpack = require('webpack');
+let BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 // Phaser webpack config
-var phaserModule = path.join(__dirname, '/node_modules/phaser-ce/')
-var phaser = path.join(phaserModule, 'build/custom/phaser-split.js')
-var pixi = path.join(phaserModule, 'build/custom/pixi.js')
-var p2 = path.join(phaserModule, 'build/custom/p2.js')
+let phaserModule = path.join(__dirname, '/node_modules/phaser-ce/');
+let phaser = path.join(phaserModule, 'build/custom/phaser-split.js');
+let pixi = path.join(phaserModule, 'build/custom/pixi.js');
+let p2 = path.join(phaserModule, 'build/custom/p2.js');
 
-var definePlugin = new webpack.DefinePlugin({
+let definePlugin = new webpack.DefinePlugin({
   __DEV__: JSON.stringify(JSON.parse(process.env.BUILD_DEV || 'true'))
-})
+});
 
 module.exports = {
   entry: {
@@ -20,7 +20,7 @@ module.exports = {
     ],
     vendor: ['pixi', 'p2', 'phaser', 'webfontloader']
   },
-  devtool: 'cheap-source-map',
+  devtool: 'source-map',
   output: {
     pathinfo: true,
     path: path.resolve(__dirname, 'dist'),
@@ -59,4 +59,4 @@ module.exports = {
       'p2': p2
     }
   }
-}
+};
