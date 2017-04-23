@@ -56,11 +56,11 @@ export default class extends Phaser.State {
 
     this.movedown = game.add.tween(this.all).to({y: 0}, time);
 
-    let zoom = game.add.tween(this.all.scale).to({x: scaleTo, y: scaleTo}, time, transition);
+    let zoom = game.add.tween(this.all.scale).to({x: scaleTo, y: scaleTo}, time, transition, false, 350);
     let move = game.add.tween(this.all.position).to({
       x: -(windowPos.x) * scaleTo,
       y: -(windowPos.y) * scaleTo
-    }, time, transition);
+    }, time, transition, false, 350);
 
 
     this.movedown.onComplete.add(() => {
@@ -85,9 +85,8 @@ export default class extends Phaser.State {
     let time = 4700;
     let transition = Phaser.Easing.Exponential.In;
     let scale = 1.15;
-    game.add.tween(this.all).to({ alpha: 0 }, time, transition).start();
-    game.add.tween(this.room.scale).to({x: scale, y:  scale}, 3700, transition)
-      .start()
+    game.add.tween(this.all).to({ alpha: 0 }, time, transition, true);
+    game.add.tween(this.room.scale).to({x: scale, y:  scale}, 3700, transition, true)
       .onComplete
       .add(() => this.zoomTo(this.room, 530, 142, 4)
         .onComplete
