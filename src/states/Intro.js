@@ -64,10 +64,8 @@ export default class extends Phaser.State {
 
 
     this.movedown.onComplete.add(() => {
-      setTimeout(() => {
-        move.start();
-        zoom.start();
-      }, 350);
+      move.start();
+      zoom.start();
     });
 
     zoom.onComplete.add(() => {
