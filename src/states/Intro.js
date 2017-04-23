@@ -80,7 +80,7 @@ export default class extends Phaser.State {
     this.world.add(this.room);
     this.room.sendToBack();
 
-    let time = 2700;
+    let time = 3700;
     let transition = Phaser.Easing.Exponential.In;
     let scale = 1.15;
     game.add.tween(this.all).to({ alpha: 0 }, time, Phaser.Easing.Exponential.Out, true);

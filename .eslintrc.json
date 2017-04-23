@@ -16,6 +16,7 @@
   },
   "globals": {
     "game": false,
-    "dt": true
+    "dt": true,
+    "__DEV__": false
   }
 }
