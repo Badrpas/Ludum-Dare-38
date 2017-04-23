@@ -11,10 +11,17 @@ export default class extends Phaser.State {
 
     this.load.setPreloadSprite(this.loaderBar);
 
-    this.load.image('qwe', './assets/images/qwe.png');
+    // this.load.image('qwe', './assets/images/qwe.png');
+
+    // Intro
     this.load.image('city', './assets/images/city.png');
     this.load.image('room', './assets/images/room.png');
     this.load.image('star', './assets/images/star.png');
+
+    // Game
+    this.load.spritesheet('bacteria', './assets/images/bacteria.png', 64, 64, 4);
+    this.load.spritesheet('mouth', './assets/images/mouth.png', 64, 64, 4);
+    this.load.image('small-bacteria', './assets/images/small-bacteria.png');
   }
 
   create () {

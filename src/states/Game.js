@@ -1,50 +1,78 @@
-/* globals __DEV__ */
 import Phaser from 'phaser';
 import config from '../config';
+import Bacteria from '../sprites/Bacteria';
+import Enemy from '../sprites/Enemy';
+import SmallBacteria from '../sprites/SmallBacteria';
 
-let ROTATION_SPEED = Math.PI;
-
+function getRandomPos (padding = 300) {
+  return [
+    game.rnd.integerInRange(padding, config.width - padding),
+    game.rnd.integerInRange(padding, config.height - padding)
+  ];
+}
 
 export default class extends Phaser.State {
-  init () {}
+  init () {
+    this.stage.backgroundColor = 0x0d2500;
+  }
+
   preload () {}
 
   create () {
-    this.qwe = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'qwe');
-    this.qwe.anchor.setTo(0.5);
-    game.world.add(this.qwe);
-    this.speedX = 100;
-    this.speedY = 100;
+    this.physics.startSystem(Phaser.Physics.ARCADE);
+
+    this.smallBacteries = this.add.group();
+    this.enemies = this.add.group();
+
+    this.player = new Bacteria(1024, 500);
+
+    this.spawnEnemy();
+
+    for (let i = 0; i < 25; i++) {
+      setTimeout(() => this.spawnSmallBacteria(), i * 100);
+    }
+
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+    // this.cursors.right = this.input.keyboard.key
   }
 
-  render () {
-    if (__DEV__) {
-      this.game.debug.spriteInfo(this.qwe, 32, 32);
-    }
-    this.qwe.rotation += ROTATION_SPEED * this.game.dt;
-
-    if (this.qwe.x > config.width) {
-      this.qwe.x = config.width;
-      this.speedX = -this.speedX;
-      ROTATION_SPEED = -ROTATION_SPEED;
-    }
-    if (this.qwe.y > config.height) {
-      this.qwe.y = config.height;
-      this.speedY = -this.speedY;
-      ROTATION_SPEED = -ROTATION_SPEED;
-    }
-    if (this.qwe.x < 0) {
-      this.qwe.x = 0;
-      this.speedX = -this.speedX;
-      ROTATION_SPEED = -ROTATION_SPEED;
-    }
-    if (this.qwe.y < 0) {
-      this.qwe.y = 0;
-      this.speedY = -this.speedY;
-      ROTATION_SPEED = -ROTATION_SPEED;
-    }
-
-    this.qwe.x += this.speedX * this.game.dt;
-    this.qwe.y += this.speedY * this.game.dt;
+  spawnEnemy () {
+    let [x, y] = getRandomPos();
+    this.enemies.add(new Enemy(x, y));
   }
+
+  spawnSmallBacteria (isNew = true) {
+    let [x, y] = getRandomPos(20);
+    this.smallBacteries.add(new SmallBacteria(x, y, isNew));
+  }
+
+  update () {
+    this.player.moveDirection.x = +this.cursors.right.isDown - this.cursors.left.isDown;
+    this.player.moveDirection.y = +this.cursors.down.isDown - this.cursors.up.isDown;
+
+    game.physics.arcade.collide(this.player, this.enemies, this.playerEnemyCollision, null, this);
+    game.physics.arcade.collide(this.enemies, null, this.enemyEnemyCollision, null, this);
+
+
+    game.physics.arcade.collide(this.player, this.smallBacteries, this.playerSmallBacteriaCollision, null, this);
+  }
+
+  enemyEnemyCollision (first, second) {
+    first.onEnemyCollide(second);
+  }
+
+  playerEnemyCollision (me, enemy) {
+    if (!enemy.destroing) {
+      this.spawnEnemy();
+    }
+    this.player.onEnemyCollide(enemy);
+  }
+
+  playerSmallBacteriaCollision (me, bacteria) {
+    this.player.onSmallBacteriaCollide(bacteria);
+    this.spawnSmallBacteria();
+  }
+
+
 }

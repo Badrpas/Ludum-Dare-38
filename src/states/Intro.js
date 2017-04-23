@@ -80,15 +80,18 @@ export default class extends Phaser.State {
     this.world.add(this.room);
     this.room.sendToBack();
 
-    let time = 4700;
+    let time = 2700;
     let transition = Phaser.Easing.Exponential.In;
     let scale = 1.15;
-    game.add.tween(this.all).to({ alpha: 0 }, time, transition, true);
+    game.add.tween(this.all).to({ alpha: 0 }, time, Phaser.Easing.Exponential.Out, true);
     game.add.tween(this.room.scale).to({x: scale, y:  scale}, 3700, transition, true)
       .onComplete
       .add(() => this.zoomTo(this.room, 530, 142, 4)
         .onComplete
-        .add(() => this.zoomTo(this.room, 800, 355, 100, 3700, Phaser.Easing.Exponential.InOut))
+        .add(() => this.zoomTo(this.room, 800, 355, 100, 3700, Phaser.Easing.Exponential.InOut)
+          .onComplete
+          .add(() => this.state.start('Game'))
+        )
       );
   }
 
