@@ -5,9 +5,11 @@ import { runSpawnAnimation, getState } from '../utils';
 
 
 export default class Bacteria extends Phaser.Sprite {
-  constructor (x, y, speed = 300, sprite = 'bacteria') {
+  constructor (x, y, sprite = 'bacteria') {
     super(game, x, y, sprite);
     this.anchor.setTo(0.5);
+
+    this.power = 1;
 
     runSpawnAnimation(this);
 
@@ -17,13 +19,28 @@ export default class Bacteria extends Phaser.Sprite {
 
     this.moveDirection = new Vector();
 
-    this.speed = speed;
+    this.speed = 300;
 
     this.initPhysics();
 
     this.initMouth();
 
     game.world.add(this);
+  }
+
+  upgrade (count = 1) {
+    this.power += count;
+
+    let scale = 1 + (1 - 1 / (1 + this.power / 18));
+    this.scale.setTo(scale);
+
+    let radius = 32 * scale * 0.84;
+    this.body.setCircle(radius,
+      (-radius + 0.5 * this.width  / this.scale.x),
+      (-radius + 0.5 * this.height / this.scale.y)
+    );
+
+    this.speed = 300 - (scale - 1) * 150;
   }
 
   initPhysics () {
@@ -53,50 +70,30 @@ export default class Bacteria extends Phaser.Sprite {
       this.animations.play('idle', 4, true);
     }
 
-    this.checkClosest();
   }
 
   onEnemyCollide (enemy) {
-    enemy.destroy();
-
+    if (this.canSee(enemy) && enemy.power < this.power) {
+      enemy.destroy();
+      this.upgrade(Math.max(1, enemy.power));
+    }
   }
 
   onSmallBacteriaCollide (smallBacteria) {
     smallBacteria.destroy();
+    this.upgrade();
   }
 
-  checkClosest () {
-    this.findClosest();
-    let closest = this.findClosest();
-    let angle = closest && game.physics.arcade.angleBetween(this, closest, true);
-    if (closest && Math.abs(angle - this.rotation - Math.PI_2) < Math.PI_2 / 2) {
-      this.mouth.animations.play('nom-nom');
-    } else {
-      this.mouth.animations.play('idle');
-    }
+  canSee (other) {
+    let angle = game.physics.arcade.angleBetween(this, other, true) - Math.PI_2;
+    let a = new Vector(Math.cos(angle), Math.sin(angle));
+    let b = new Vector(Math.cos(this.rotation), Math.sin(this.rotation));
+
+    return Math.acos(a.dot(b)) < Math.PI_2 / 2;
   }
 
-  findClosest () {
-    let s = getState();
-    let closest = null;
-    let closestLength = 200;
-
-    let predicate = (enemy) => {
-      if (enemy !== this) {
-        let distance = game.physics.arcade.distanceBetween(this, enemy, true);
-        if (distance < closestLength) {
-          closest = enemy;
-          closestLength = distance;
-        }
-      }
-    };
-
-    s.enemies.forEach(predicate);
-    s.smallBacteries.forEach(predicate);
-
-    this.target = closest;
-    return closest;
+  spawn (x, y) {
+    runSpawnAnimation(this);
   }
-
 
 }
